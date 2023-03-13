@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1420791944"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FuC:\Users\Usuario\Desktop\Facultad_Informatica\Materias2doAño\FundamDeOrgDeDatos\ejercicios\EjerciciosCompañeritos\Greta.loca\ -FUC:\Users\Usuario\Desktop\Facultad_Informatica\Materias2doAño\FundamDeOrgDeDatos\ejercicios\EjerciciosCompañeritos\Greta.loca\lib\x86_64-win64\ -FEC:\Users\Usuario\Desktop\Facultad_Informatica\Materias2doAño\FundamDeOrgDeDatos\ejercicios\EjerciciosCompañeritos\Greta.loca\ -oC:\Users\Usuario\Desktop\Facultad_Informatica\Materias2doAño\FundamDeOrgDeDatos\ejercicios\EjerciciosCompañeritos\Greta.loca\ejercicio3.exe ejercicio3.pas"/>
+  <Complete Value="False"/>
+</CONFIG>

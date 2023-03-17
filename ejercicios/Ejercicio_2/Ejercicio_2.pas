@@ -4,7 +4,7 @@
   b)- El promedio de los números ingresados. 
   c)- El nombre del archivo a procesar debe ser
   proporcionado por el usuario una única vez. Además, 
-  d)- Eel algoritmo deberá listar el contenido del archivo en pantalla.}
+  d)- El algoritmo deberá listar el contenido del archivo en pantalla.}
 
 program Ejercicio_2;
 	uses crt;

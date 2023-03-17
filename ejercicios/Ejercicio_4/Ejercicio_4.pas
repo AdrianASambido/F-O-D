@@ -1,16 +1,15 @@
-{ Realizar un programa que presente un menú con opciones para:
-      a. Crear un archivo de registros no ordenados de empleados y completarlo con
-         datos ingresados desde teclado. De cada empleado se registra: número de
-         empleado, apellido, nombre, edad y DNI. Algunos empleados se ingresan con
-         DNI 00. La carga finaliza cuando se ingresa el String ‘fin’ como apellido.
-      b. Abrir el archivo anteriormente generado y
-      i. Listar en pantalla los datos de empleados que tengan un nombre o apellido
-         determinado.
-      ii. Listar en pantalla los empleados de a uno por línea.
-      iii. Listar en pantalla empleados mayores de 70 años, próximos a jubilarse.
-NOTA: El nombre del archivo a crear o utilizar debe ser proporcionado por el usuario.}
-
-program Ejercicio3;
+{4. Agregar al menú del programa del ejercicio 3, opciones para:
+   a. Añadir uno o más empleados al final del archivo con sus datos ingresados por
+      teclado. Tener en cuenta que no se debe agregar al archivo un empleado con
+      un número de empleado ya registrado (control de unicidad).
+   b. Modificar edad a uno o más empleados.
+   c. Exportar el contenido del archivo a un archivo de texto llamado
+      “todos_empleados.txt”.
+		d. Exportar a un archivo de texto llamado: “faltaDNIEmpleado.txt”, los empleados
+			que no tengan cargado el DNI (DNI en 00).
+	NOTA: Las búsquedas deben realizarse por número de empleado.} 
+	
+program Ejercicio4;
 
 type
 	empleado = record
@@ -36,7 +35,7 @@ type
 					writeln('Ingrese edad del empleado');
 					readln(reg.edad);
 					writeln('Ingrese Dni del empleado');
-					readln(reg.dni);
+					readln(reg.dni);					
 				end;
 		end;		
 
@@ -163,6 +162,62 @@ type
 						end;		
 				end;
 		end;
+
+	procedure modificarEdad(var archivoFisico: archivo);
+		begin
+			
+		
+		end;
+	
+	// Se pre-supone que el archivo existe	
+	procedure agregarEmpleado(var archivoFisico: archivo);	
+	var reg: empleado;
+		begin
+			seek(archivoFisico,fileSize(archivoFisico));
+			writeln('Para finalizar la carga ingrese apellido "fin"');
+			cargarRegistro(reg);			
+			while(reg.apellido <> 'fin')do
+				begin
+					write(archivoFisico, reg);
+					cargarRegistro(reg);
+				end;
+			close(archivoFisico);	
+		end;
+		
+	procedure menuSecundario(var archivoFisico : archivo);
+	var
+		ok : boolean;
+		reg: empleado;
+		n  : integer;
+		begin
+			writeln('------------------menu de opciones------------------');
+			writeln('---------- Que desea hacer ----------');
+			writeln('agregar un nuevo empleado                 digite: 1');
+			writeln('Modificar la edad de uno/o mas empleados  digite: 2');
+			writeln('exportar el archivo a:todos_empleados.txt digite: 3');
+			writeln('Exportar los empleados sin DNI cargado    digite: 4');
+			writeln('si desea finalizar                        digite: 5');
+			readln(n);
+			while(ok)do
+				begin
+					if((n = 1)or(n = 2)or(n = 3 )or(n = 4))then
+						begin
+							case n of
+								1: agregarEmpleado(archivoFisico);
+								2: modificarEdad(archivoFisico);				
+								3: exportarTodosEmpleados(archivoFisico);
+								4: ExpotarEmpleadosDinDni(archivoFisico); 	
+							end;
+						ok := false		
+						end	
+					else 
+						if(n = 5)then
+							ok := false
+						else	
+							writeln('opcion invalida digite una opcion  valida');	
+				end;
+		end;	
+		
 	
 	procedure desplegarMenu(var archivoFisico: archivo);
 	var n: integer;
@@ -170,9 +225,10 @@ type
 		begin
 			ok := true;
 			writeln('----------------menu de opciones----------------');
-			writeln('Si decea crear un archivo nuevo       digite: 1');
+			writeln('Si desea crear un archivo nuevo       digite: 1');
 			writeln('Abrir el archivo creado anteriormente digite: 2');
-			writeln('si decea finalizar                    digite: 3');
+			writeln('Si desea ver mas opciones             digite: 3');
+			writeln('si desea finalizar                    digite: 6');
 			readln(n);
 			while(ok)do
 				begin
@@ -180,12 +236,13 @@ type
 						begin
 							case n of
 								1: crearArchivo(archivoFisico);
-								2: AbrirArchivo(archivoFisico);						
+								2: abrirArchivo(archivoFisico);				
+								3: menuSecundario(archivoFisico);	
 							end;
 						ok := false		
 						end	
 					else 
-						if(n = 3)then
+						if(n = 6)then
 							ok := false
 						else	
 							writeln('opcion invalida digite una opcion  valida');	
@@ -198,3 +255,4 @@ var
 begin
 	desplegarMenu(archivoFisico);
 end.
+	

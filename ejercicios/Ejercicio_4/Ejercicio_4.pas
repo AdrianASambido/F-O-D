@@ -11,11 +11,12 @@
 	
 program Ejercicio4;
 
+uses crt;
 type
 	empleado = record
 		numEmp  : integer;
-		apellido: String;
-		nombre  : String;
+		apellido: String[20];
+		nombre  : String[20];
 		edad    : integer;
 		dni     : integer;
 	end;
@@ -39,29 +40,29 @@ type
 				end;
 		end;		
 
-	procedure asignarArchivo(var archivoFisico: archivo);
+	procedure asignarArchivo(var archivoLogico: archivo);
 	var 
 		nom: string;
 		begin
 			writeln('Ingrese un nombre para el archivo');
 		  readln(nom);
-			assign(archivoFisico,nom);
-			rewrite(archivoFisico);
+			assign(archivoLogico,nom);
+			rewrite(archivoLogico);
 		end;
 
-	procedure crearArchivo(var archivoFisico: archivo);
+	procedure crearArchivo(var archivoLogico: archivo);
 	var 
 		reg: empleado;
 		begin
-		  asignarArchivo(archivoFisico);
 		  writeln('Para finalizar la carga ingrese apellido "fin"');
+		  rewrite(archivoLogico);
 			cargarRegistro(reg);
 			while(reg.apellido <> 'fin')do
 				begin
-					write(archivoFisico, reg);
+					write(archivoLogico, reg);
 					cargarRegistro(reg);
 				end;
-			close(archivoFisico);	
+			close(archivoLogico);	
 		end;
 		
 	procedure imprimirDeterminados(reg: empleado; nom: string);	
@@ -74,65 +75,69 @@ type
 		end;
 		
 		
-	procedure	seleccionarEmpleados(var archivoFisico: archivo);
+	procedure	seleccionarEmpleados(var archivoLogico: archivo);
 	var 
 		nom: String;
 		reg: empleado;
 		begin
-			reset(archivoFisico);
+			reset(archivoLogico);
 			writeln('Ingrese nombre o apellido para buscar coincidencias');
 			readln(nom);
-			while(not eof(archivoFisico))do
+			while(not eof(archivoLogico))do
 				begin
-					read(archivoFisico, reg);
+					read(archivoLogico, reg);
 					imprimirDeterminados(reg,nom);
 				end;
-			close(archivoFisico);
+			close(archivoLogico);
 		end;
 		
 	procedure imprimirEmpleado(reg: empleado);
 		begin
-			writeln(reg.numEmp, '  ' ,reg.apellido, '  ' ,reg.nombre, '  ' ,reg.edad, '  ' ,reg.dni);
+			writeln(reg.numEmp);
+			writeln(reg.apellido);
+			writeln(reg.nombre);
+			writeln(reg.edad);
+			writeln(reg.dni);
 		end;
 			
-	procedure listarEmpleados(var archivoFisico: archivo);
+	procedure listarEmpleados(var archivoLogico: archivo);
 	var
 			reg: empleado;
 			begin
-				reset(archivoFisico);
-				while(not eof(archivoFisico))do
+				reset(archivoLogico);
+				while(not eof(archivoLogico))do
 					begin
-						read(archivoFisico,reg);
+						read(archivoLogico,reg);
 						writeln('----------------------------------');
 						imprimirEmpleado(reg);
 						writeln('----------------------------------');
 					end;
-				close(archivoFisico);
+				close(archivoLogico);
 			end;
 	
-	procedure listarJubilados(var archivoFisico: archivo);
+	procedure listarJubilados(var archivoLogico: archivo);
 	var
 		reg: empleado;
 		begin
-			reset(archivoFisico);
-			while(not eof(archivoFisico))do
+			reset(archivoLogico);
+			while(not eof(archivoLogico))do
 				begin
-					read(archivoFisico,reg);
+					read(archivoLogico,reg);
 					if(reg.edad > 70 )then
 						imprimirEmpleado(reg);
 				end;
-			close(archivoFisico);
+			close(archivoLogico);
 		end;
 	
 	//Lista empleados condeterminado nombre o apellido
 	//
-	procedure abrirArchivo(var archivoFisico: archivo);
+	procedure abrirArchivo(var archivoLogico: archivo);
 	var 
 		n: integer;
 		ok: boolean;
 		begin
 			ok := true;
-			assign(archivoFisico, 'Ejercicio3');
+	//		assign(archivoLogico, 'Ejercicio3');
 			writeln('--------------------- menu de opciones ---------------------');
 			writeln('Para listar determinados empleados                digite: 1');
 			writeln('Para listar la totalidad de empleados             digite: 2');
@@ -144,9 +149,9 @@ type
 					if(n = 1)or(n = 2)or(n = 3)then
 						begin
 							case n of
-								1: seleccionarEmpleados(archivoFisico);
-								2: listarEmpleados(archivoFisico);
-								3: listarJubilados(archivoFisico);
+								1: seleccionarEmpleados(archivoLogico);
+								2: listarEmpleados(archivoLogico);
+								3: listarJubilados(archivoLogico);
 							end;
 							ok := false;
 						end	
@@ -163,32 +168,115 @@ type
 				end;
 		end;
 
-	procedure modificarEdad(var archivoFisico: archivo);
+	procedure modificarE(var archivoLogico: archivo; reg: empleado);
+	var edad: integer;
 		begin
-			
+			writeln('ingrese edad');
+			readln(edad);
+			reg.edad := edad;
+			seek(archivoLogico, filePos(archivoLogico)-1);
+			write(archivoLogico, reg);
+		end;
 		
+
+	procedure modificarEdad(var archivoLogico: archivo);
+	var
+		reg : empleado;
+		ok  : String;
+		begin
+			reset(archivoLogico);
+			while(not eof(archivoLogico))do			
+				begin
+					read(archivoLogico, reg);
+					writeln('el empleado' , '  ' , reg.apellido, '  ' , reg.nombre, '  ' , 'tiene::' , '  ' , reg.edad);
+					writeln('Desea modificar la edad ?, ingrese si o no');
+					readln(ok);
+					if(ok = 'si')then
+						begin
+							modificarE(archivoLogico, reg);
+						end;	
+				end;
+			writeln('Ya no mas empleaods en la lista');
+			close(archivoLogico);
+		end;
+	
+	procedure existe(var archivoLogico: archivo; num: integer; var ok: boolean);
+	var	
+		reg: empleado;
+		begin
+			ok := false;
+			while(not eof(archivoLogico)and(ok))do
+				begin
+					read(archivoLogico, reg);
+					if(reg.numEmp = num)then
+						ok:= true;
+				end;	
+			close(archivoLogico);	
 		end;
 	
 	// Se pre-supone que el archivo existe	
-	procedure agregarEmpleado(var archivoFisico: archivo);	
-	var reg: empleado;
+	procedure agregarEmpleado(var archivoLogico: archivo);	
+	var 
+		reg: empleado;
+		ok : boolean;
 		begin
-			seek(archivoFisico,fileSize(archivoFisico));
 			writeln('Para finalizar la carga ingrese apellido "fin"');
-			cargarRegistro(reg);			
+			cargarRegistro(reg);
 			while(reg.apellido <> 'fin')do
 				begin
-					write(archivoFisico, reg);
+					reset(archivoLogico);
+					existe(archivoLogico, reg.numEmp,ok);
+					if(ok)then
+						writeln('El empleado existe, ingrese otro')
+					else	
+						seek(archivoLogico,fileSize(archivoLogico));
+						write(archivoLogico, reg);
 					cargarRegistro(reg);
-				end;
-			close(archivoFisico);	
+				end;		
+			close(archivoLogico);				
 		end;
 		
-	procedure menuSecundario(var archivoFisico : archivo);
+	// Exportar el contenido del archivo a un archivo 
+	// de texto llamado “todos_empleados.txt”.	
+		
+	procedure exportarTodosEmpleados(var archivoLogico: archivo; var todos_empleados: Text);
+	var
+		reg:empleado;
+		begin
+			reset (archivoLogico);
+			rewrite (todos_empleados);
+			while not eof (archivoLogico) do begin
+				read (archivoLogico,reg);
+				with reg do writeln (todos_empleados,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
+			end;
+		close (archivoLogico);
+		close (todos_empleados)
+		end;
+	
+//	Exportar a un archivo de texto llamado: “faltaDNIEmpleado.txt”, los empleados
+//	que no tengan cargado el DNI (DNI en 00).
+	procedure exportarEmpleadosSinDni(var archivoLogico : archivo; var faltaDniEmpleado:text);
+	var
+		reg: empleado;
+		begin
+			reset (archivoLogico);
+			rewrite (faltaDniEmpleado);
+			while not eof (archivoLogico) do 
+				begin
+					read(archivoLogico,reg);
+					if(reg.dni = 00)then
+						with reg do writeln (faltaDniEmpleado,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
+				end;
+			close (archivoLogico);
+			close (faltaDniEmpleado)
+		end;	
+		
+	procedure menuSecundario(var archivoLogico : archivo);
 	var
 		ok : boolean;
-		reg: empleado;
 		n  : integer;
+		todos_empleados : text;
+		faltaDNIEmpleado: text;
 		begin
 			writeln('------------------menu de opciones------------------');
 			writeln('---------- Que desea hacer ----------');
@@ -203,10 +291,10 @@ type
 					if((n = 1)or(n = 2)or(n = 3 )or(n = 4))then
 						begin
 							case n of
-								1: agregarEmpleado(archivoFisico);
-								2: modificarEdad(archivoFisico);				
-								3: exportarTodosEmpleados(archivoFisico);
-								4: ExpotarEmpleadosDinDni(archivoFisico); 	
+								1: agregarEmpleado(archivoLogico);
+								2: modificarEdad(archivoLogico);				
+								3: exportarTodosEmpleados(archivoLogico,todos_empleados);
+								4: exportarEmpleadosSinDni(archivoLogico,faltaDniEmpleado); 	
 							end;
 						ok := false		
 						end	
@@ -219,10 +307,11 @@ type
 		end;	
 		
 	
-	procedure desplegarMenu(var archivoFisico: archivo);
+	procedure desplegarMenu(var archivoLogico: archivo; nombre: String);
 	var n: integer;
 			ok: boolean;
 		begin
+			assign(archivoLogico,'Ejercicio4');
 			ok := true;
 			writeln('----------------menu de opciones----------------');
 			writeln('Si desea crear un archivo nuevo       digite: 1');
@@ -232,12 +321,12 @@ type
 			readln(n);
 			while(ok)do
 				begin
-					if(n = 1)or(n = 2)then
+					if((n = 1)or(n = 2)or(n = 3))then
 						begin
 							case n of
-								1: crearArchivo(archivoFisico);
-								2: abrirArchivo(archivoFisico);				
-								3: menuSecundario(archivoFisico);	
+								1: crearArchivo(archivoLogico);
+								2: abrirArchivo(archivoLogico);				
+								3: menuSecundario(archivoLogico);	
 							end;
 						ok := false		
 						end	
@@ -251,8 +340,15 @@ type
 		end;
 
 var
-	archivoFisico: archivo;
+	archivoLogico   : archivo;
+	faltaDniEmpleado:text;
+	todos_empleados :text;
+	nombre          : String;
 begin
-	desplegarMenu(archivoFisico);
+	textcolor(02);
+	clrscr;
+	writeln('ingrese el nommbre del archivo');
+	readln(nombre);
+	desplegarMenu(archivoLogico,nombre);
+	writeln('TE FELICITO ADRIAN, SOS UN CAPO');
 end.
-	

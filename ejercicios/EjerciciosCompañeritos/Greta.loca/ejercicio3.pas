@@ -16,9 +16,9 @@ uses crt; {biblioteca que encontré}
 
 type
     empleado = record
-        nombre:String;
-        apellido:String;
-        dni:String;
+        nombre:String[20];
+        apellido:String[20];
+        dni:String[20];
         edad:integer;
     end;
 
@@ -62,12 +62,11 @@ procedure crearArchivo(var a:archivo);
         rewrite(a);
         cargarArchivo(a);
         close(a);
-        clrscr;
     end;
 
 procedure listarEmpleados(var a:archivo);
     var
-        e:empleado;
+			e:empleado;
     begin
         reset(a);
         while(not eof(a))do begin
@@ -109,6 +108,7 @@ procedure manipularArchivo(var a:archivo);
 	var
 		n:integer;
 	begin
+		n:=0;
 		while(n<>3)do begin
 			writeln('----------------------MANEJO DEL ARCHIVO----------------------');
 			writeln('1: listar nombres');
@@ -125,11 +125,11 @@ procedure manipularArchivo(var a:archivo);
 		end;
 	end;
 
-procedure archiveMenu(var a:archivo; nombre:String);
+procedure archiveMenu(var a:archivo);
     var
-        n:integer;
+      n:integer;
     begin
-		assign(a,nombre);
+		n:= 0;
 		while(n<>3)do begin
 			writeln('----------------------MENU----------------------');
 			writeln('1: crear archivo');
@@ -150,6 +150,7 @@ var
 begin
 	textcolor(10);
 	writeln('NOMBRE ARCHIVO: ');readln(nombre);
-    archiveMenu(a,nombre);
-    close(a);
+	assign(a,'nombre');
+  archiveMenu(a);
+  close(a);
 end.

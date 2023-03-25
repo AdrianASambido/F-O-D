@@ -133,7 +133,7 @@ type
 		ok: boolean;
 		begin
 			ok := true;
-			assign(archivoFisico, 'Ejercicio3');
+			assign(archivoFisico,'Ejercicio3');
 			writeln('--------------------- menu de opciones ---------------------');
 			writeln('Para listar determinados empleados                digite: 1');
 			writeln('Para listar la totalidad de empleados             digite: 2');
@@ -172,7 +172,7 @@ type
 			writeln('----------------menu de opciones----------------');
 			writeln('Si decea crear un archivo nuevo       digite: 1');
 			writeln('Abrir el archivo creado anteriormente digite: 2');
-			writeln('si decea finalizar                    digite: 3');
+			writeln('si desea finalizar                    digite: 3');
 			readln(n);
 			while(ok)do
 				begin

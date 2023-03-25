@@ -1,0 +1,11 @@
+1000 g30 usado Motorola  170000  40 50 
+
+1001 g8 usado Motorola 120000   20 20
+
+1010 gp9 usado Motorola 150000  15 10
+
+1011 dex nuevo sangsum 180000   10 25
+
+1100 alvatroz nuevo sangsum 90000 20 21
+
+1101 ggp re-usada elPaso 0000 1 1

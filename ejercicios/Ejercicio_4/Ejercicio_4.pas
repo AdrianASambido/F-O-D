@@ -27,7 +27,7 @@ type
 		begin
 			writeln('Ingrese apellido del empleado');
 			readln(reg.apellido);
-			if(reg.apellido <> 'fin')then;
+			if(reg.apellido <> 'fin')then
 				begin
 					writeln('Ingrese numero de empleado');
 					readln(reg.numEmp);
@@ -229,8 +229,11 @@ type
 					if(ok)then
 						writeln('El empleado existe, ingrese otro')
 					else	
-						seek(archivoLogico,fileSize(archivoLogico));
-						write(archivoLogico, reg);
+						begin
+							reset (archivoLogico);
+							seek(archivoLogico,fileSize(archivoLogico));
+							write(archivoLogico, reg);
+						end;	
 					cargarRegistro(reg);
 				end;		
 			close(archivoLogico);				
@@ -239,44 +242,46 @@ type
 	// Exportar el contenido del archivo a un archivo 
 	// de texto llamado “todos_empleados.txt”.	
 		
-	procedure exportarTodosEmpleados(var archivoLogico: archivo; var todos_empleados: Text);
+	procedure exportarTodosEmpleados(var archivoLogico: archivo);
 	var
 		reg:empleado;
+		tx : text;
 		begin
 			reset (archivoLogico);
-			rewrite (todos_empleados);
+			assign(tx,'todos_empleados.txt'); 
+			rewrite (tx);
 			while not eof (archivoLogico) do begin
 				read (archivoLogico,reg);
-				with reg do writeln (todos_empleados,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
+				with reg do writeln (tx,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
 			end;
 		close (archivoLogico);
-		close (todos_empleados)
+		close (tx);
 		end;
-	
+
 //	Exportar a un archivo de texto llamado: “faltaDNIEmpleado.txt”, los empleados
 //	que no tengan cargado el DNI (DNI en 00).
-	procedure exportarEmpleadosSinDni(var archivoLogico : archivo; var faltaDniEmpleado:text);
+	procedure exportarEmpleadosSinDni(var archivoLogico : archivo);
 	var
 		reg: empleado;
+		t: text;
 		begin
 			reset (archivoLogico);
-			rewrite (faltaDniEmpleado);
+			assign(t, 'faltaDNIEmpleado.txt');
+			rewrite (t);	
 			while not eof (archivoLogico) do 
 				begin
 					read(archivoLogico,reg);
 					if(reg.dni = 00)then
-						with reg do writeln (faltaDniEmpleado,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
+						with reg do writeln (t,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
 				end;
 			close (archivoLogico);
-			close (faltaDniEmpleado)
+			close (t);
 		end;	
 		
 	procedure menuSecundario(var archivoLogico : archivo);
 	var
 		ok : boolean;
 		n  : integer;
-		todos_empleados : text;
-		faltaDNIEmpleado: text;
 		begin
 			writeln('------------------menu de opciones------------------');
 			writeln('---------- Que desea hacer ----------');
@@ -293,8 +298,8 @@ type
 							case n of
 								1: agregarEmpleado(archivoLogico);
 								2: modificarEdad(archivoLogico);				
-								3: exportarTodosEmpleados(archivoLogico,todos_empleados);
-								4: exportarEmpleadosSinDni(archivoLogico,faltaDniEmpleado); 	
+								3: exportarTodosEmpleados(archivoLogico);
+								4: exportarEmpleadosSinDni(archivoLogico); 	
 							end;
 						ok := false		
 						end	
@@ -307,7 +312,7 @@ type
 		end;	
 		
 	
-	procedure desplegarMenu(var archivoLogico: archivo; nombre: String);
+	procedure desplegarMenu(var archivoLogico: archivo);
 	var n: integer;
 			ok: boolean;
 		begin
@@ -340,15 +345,10 @@ type
 		end;
 
 var
-	archivoLogico   : archivo;
-	faltaDniEmpleado:text;
-	todos_empleados :text;
-	nombre          : String;
+	archivoLogico: archivo;
 begin
 	textcolor(02);
 	clrscr;
-	writeln('ingrese el nommbre del archivo');
-	readln(nombre);
-	desplegarMenu(archivoLogico,nombre);
+	desplegarMenu(archivoLogico);
 	writeln('TE FELICITO ADRIAN, SOS UN CAPO');
 end.

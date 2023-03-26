@@ -252,7 +252,8 @@ type
 			rewrite (tx);
 			while not eof (archivoLogico) do begin
 				read (archivoLogico,reg);
-				with reg do writeln (tx,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
+				with reg do
+					writeln (tx,'|NRO: ',numEmp:10,'|EDAD: ',edad:10,'|DNI: ',dni:10,'|APELLIDO: ',apellido:10,'|NOMBRE: ',nombre:10); 
 			end;
 		close (archivoLogico);
 		close (tx);

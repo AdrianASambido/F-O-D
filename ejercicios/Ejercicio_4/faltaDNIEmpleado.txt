@@ -1,2 +1,3 @@
-|NRO:        111|EDAD:         55|DNI:          0|APELLIDO:    sambido|NOMBRE:     adrian
+|NRO:        111|EDAD:         22|DNI:          0|APELLIDO:    sambido|NOMBRE:     adrian
 |NRO:        222|EDAD:         71|DNI:          0|APELLIDO: piacentini|NOMBRE:      greta
+|NRO:        444|EDAD:         54|DNI:          0|APELLIDO:      gomez|NOMBRE:    horacio

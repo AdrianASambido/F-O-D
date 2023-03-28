@@ -33,8 +33,8 @@ var
 			reset(texOrigen);
 			while(not eof (texOrigen))do begin
 				with reg do begin
-					writeln(texOrigen,cod,precio,genero);
-					writeln(texOrigen,nombre);
+					readln(texOrigen,cod,precio,genero);
+					readln(texOrigen,nombre);
 				end;
 				write(ar,reg);
 			end;
@@ -44,10 +44,12 @@ var
 	
 	procedure cargarRegistro(var reg: novela);
 		begin
-			writeln('ingrese codigo'); readln(reg.cod);
-			writeln('ingrese precio'); readln(reg.precio);
-			writeln('ingrese genero'); readln(reg.genero);
-			writeln('ingrese nombre'); readln(reg.nombre);
+			with reg do begin
+				writeln('ingrese codigo'); readln(cod);
+				writeln('ingrese precio'); readln(precio);
+				writeln('ingrese genero'); readln(genero);
+				writeln('ingrese nombre'); readln(nombre);
+			end;
 		end;	
 		
 	procedure agregarNovela(var ar: archivo);
@@ -57,6 +59,7 @@ var
 		l  : char;
 		begin
 			ok:= true;
+			reset(ar);
 			seek(ar,fileSize(ar));
 			while(ok)do begin
 				cargarRegistro(reg);
@@ -69,19 +72,46 @@ var
 		close(ar);		
 		end;
 		
-	procedure modificar(ar);
+	procedure modificar(var ar:archivo);
 	var
-		reg: novela;
-		n: String;
-			begin
-				reset(ar);
-				writeln('ingrese el nombre de la novela a modificar'); readln(n)
-				read(ar,reg)
-				while(not eof(ar))and(n<>reg.nombre)do begin
-					
-				
+		reg : novela;
+		n, d: integer;
+		ok  : boolean;
+		l   : char;
+		begin
+			ok:= true;
+			reset(ar);
+			writeln('ingrese el codigo de la novela a modificar'); readln(n);
+			while(not eof(ar))do begin
+				read(ar,reg);
+				if(n=reg.cod)then begin
+					while(ok)do begin
+						writeln('Elija el numero de campo a modificar de a uno a la vez: uno(1) para codigo, dos(2) para precio, tres(2)para genero, cuatro() para nombre');
+						readln(d);
+						case d of 
+							1:  begin 
+										writeln('ingrese codigo'); readln(reg.cod);
+									end;	
+							2: 	begin
+										writeln('ingrese precio'); readln(reg.precio);
+									end;	
+							3: 	begin
+										writeln('ingrese genero'); readln(reg.genero);
+									end;	
+							4: 	begin
+										writeln('ingrese nombre'); readln(reg.nombre);
+									end	
+							else
+									writeln('opcion no valida');
+					end;	
+				end;
+						writeln('Si desea seguir haiendo modificaciones preciones cualquier tecla, sino precione a ');
+						readln(l);
+						if((l='a')or(l='A'))then
+							ok := false;
 				end;
 			end;
+		end;
 		
 		
 	
@@ -92,6 +122,7 @@ var
 		reg: novela;
 		n  : integer;
 		ok : boolean;
+		l  : char;
 		begin
 			ok:= true;
 			writeln('Que desea hacer, 1 , agregar una novela, 2 , modificar una Existente'); readln(n);
@@ -107,11 +138,12 @@ var
 				writeln('Para finalizar ingrese la letra ' , 'a' , '  ' , 'para continuar ingrese cualquier caracter'); 
 				readln(l);
 				if((l='a')or(l='A'))then
-					ok := false;			
+					ok := false;
+			end;					
 			close(ar);
 		end;
 	
-	procedure menu(var ar:archivo; texOgigen: text);	
+	procedure menu(var ar:archivo; var texOgigen: text);	
 	var
 		ok : boolean;
 		car: char;
@@ -128,7 +160,7 @@ var
 					if(num=1)or(num=2)then
 						begin
 							case num of
-								1: crearArchivo(ar,tex);
+								1: crearArchivo(ar,texOrigen);
 								2: modificarArchivo(ar);
 							end;
 						end;	
@@ -138,10 +170,6 @@ var
 							ok := false;
 				end;
 		end;
-	
-			
-			end;
-
 		
 var
 	ar			 : archivo;

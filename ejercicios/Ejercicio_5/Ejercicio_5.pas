@@ -25,7 +25,7 @@ type
 
 celular = record
 							codigo   	 		 : integer;
-							precio	 			 : real;
+							precio	 			 : integer;
 							marca	 			 	 : String[20];
 							stockDisponible: integer;
 							stockMinimo 	 : integer;
@@ -49,7 +49,9 @@ archivo = file of celular;
 				begin
 					writeln('entre al while');
 					with dato do begin
+							writeln('entre al while');
 							readln(tex,codigo,precio,marca); {En dato guardo de a tres campos}
+							writeln('entre al while');
 							readln(tex,stockDisponible,stockMinimo, descripcion);
 							readln(tex,nombre );
 						end;
@@ -147,7 +149,7 @@ archivo = file of celular;
 					readln(num); 						 
 					if(num=1)or(num=2)or(num=3)or(num=4)then
 						begin
-							case num of
+							case num of 
 								1: crearArchivo(ar,tex);
 								2: stockMinimo(ar);
 								3: buscarCadena(ar);

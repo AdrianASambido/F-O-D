@@ -1,8 +1,8 @@
-111 2650 accion
+11 26 accion
 pìratas
 
-222 3250 terror
+22 32 terror
 oscuridad
 
-333 2500 suspenso
+33 25 suspenso
 abandonado

@@ -119,7 +119,6 @@ var
  // una novela y modificar una existente	
 	procedure modificarArchivo(var ar: archivo);	
 	var
-		reg: novela;
 		n  : integer;
 		ok : boolean;
 		l  : char;
@@ -143,7 +142,7 @@ var
 			close(ar);
 		end;
 	
-	procedure menu(var ar:archivo; var texOgigen: text);	
+	procedure menu(var ar:archivo; var texOrigen: text);	
 	var
 		ok : boolean;
 		car: char;
@@ -175,19 +174,8 @@ var
 	ar			 : archivo;
 	texOrigen: text;
 begin
+	textcolor(lightgreen);
 	assign(ar,'novela');
 	assign(texOrigen,'novelas.txt');
 	menu(ar,texOrigen);
 end.	
-
-
-
-
-
-
-
-
-
-
-
-	 

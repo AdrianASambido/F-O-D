@@ -90,9 +90,9 @@ archivo = file of celular;
 	procedure copiarAtexto(var t: text; reg:celular);
 		begin
 			with reg do  begin
-				writeln(t,codigo,precio,marca);
-				writeln(t,stockDisponible,stockMinimo, descripcion);
-				writeln(t,nombre);
+				writeln(codigo,precio,marca);
+				writeln(stockDisponible,stockMinimo, descripcion);
+				writeln(nombre);
 			end;
 			close(t);
 		end;

@@ -11,8 +11,9 @@ Nota: todos los archivos se encuentran ordenados por código de productos. En ca
 			puede venir 0 o N registros de un determinado producto.}
 
 program Ejercicio_3;
-const dimF = 30;
 
+const dimF = 30;
+			valorAlto = 9999;
 type
 	producto= record
 							nombre		 		 : String[20];
@@ -28,26 +29,59 @@ type
 									cantidadVendida: integer;
 								end;
 								
-	maestro = file of producto;
-	detalle = file of	prodVendido;
-	vecDeDetelle = array[1..dimF] of detalle;{Vector de archivos de detalle}
-								
-	procedure cargarDetalles(var vector: vecDeDetelle);							
+	archMaestro		 = file of producto;
+	archDetalle 	 = file of	prodVendido;
+	vecDeDetalle   = array[1..dimF] of archDetalle;{Vector de archivos de detalle}
+	vecDeRegistros = array[1..dimF] of prodVendido;{Vector de registros de detalle}
+	
+	//El vector de detalles ya viene cargado con los archivos							
+	procedure cargarDetalles(var vecD: vecDeDetalle; var vecR: vecDeRegistros);							
 		var
-			i: integer;
-			a: String;
+			i		: integer;
+			a		: String;
+			regD: prodVendido;
 		begin
 			for i:= 1 to dimF do begin
 				str(i,a);  {convierto el valor entero de i en un string en "a"}
-				assign(vector[i],'sucursal'+a );{concateno String}
+				assign(vecD[i],'sucursal'+a );{concateno String, y lo asigo a cada archivo}
+				reset(vecD[i]);
+				read(vecD[i],regD);
+				vecR[i]:= regD;
+				close(vecD[i]); 
 			end;
 		end;							
-								
+		
+	{--------------------------------------------------------------}	
+	
+	procedure minimo(var vecR : vecDeRegistros; var min : prodVendido);
+	var
+		i, pos : integer;
+		begin
+		min.codigoPro := valorAlto;
+		for i := 1 to dimF do begin
+			if(vecR[i].codigoPro < min.codigoPro) then begin
+				min := vecR[i];
+				pos := i;
+			end;
+		end;
+		if(min.codigo <> valorAlto)then
+			
+		
+		end;
+	
+		
+		
+	procedure merge(var maestro: archMaestro);
+	var
+		begin
+		
+		end;
+					
 var								
-	mae   : maestro;
-	vector: vecDeDetelle;				
+	maestro   : archMaestro;
+	vecDeDetalle: vecDeDetelle;				
 begin
 	assign(mae,'Ejercicio_3');
 	reset(mae);
-	cargarDetalles(vector);
+	cargarDetalles(vecD);
 end.
